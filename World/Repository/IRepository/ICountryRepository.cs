@@ -2,14 +2,8 @@
 
 namespace World.Repository.IRepository
 {
-    public interface ICountryRepository
+    public interface ICountryRepository : IGenericRepository<Country>
     {
-        Task<List<Country>> GetAll();
-        Task<Country> GetByCountryId(int countryId);
-        Task Create(Country entity);
         Task Update(Country entity);
-        Task Delete(Country entity);
-        Task Save();
-        bool IsCountryExists(string countryName);
     }
 }

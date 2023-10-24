@@ -40,12 +40,12 @@ namespace World.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<ActionResult<CountryDTO>> GetByCountryID(int countryId)
         {
-            var countryById = await _countryRepository.GetByCountryId(countryId);
-            var countryDTO = _mapper.Map<CountryDTO>(countryById);
+            var countryById = await _countryRepository.Get(countryId);
             if (countryById == null)
             {
                 return NoContent();
             }
+            var countryDTO = _mapper.Map<CountryDTO>(countryById);
             return Ok(countryDTO);
         }
         //To create a new country and add it to the database
@@ -54,7 +54,7 @@ namespace World.Controllers
         [ProducesResponseType(StatusCodes.Status201Created)]
         public async Task<ActionResult<CountryDTO>> Create([FromBody]CreateCountryDTO countryDTO)
         {
-            var countryById = _countryRepository.IsCountryExists(countryDTO.CountryName);
+            var countryById = _countryRepository.IsRecordExists(x=>x.CountryName == countryDTO.CountryName);
             if (countryById)
             {
                 return Conflict("Country already exists in the database!");
@@ -75,7 +75,7 @@ namespace World.Controllers
             {
                 return BadRequest();
             }
-            var countryById = _countryRepository.GetByCountryId(countryId);
+            var countryById = _countryRepository.Get(countryId);
             var country = _mapper.Map<Country>(countryById);
             if(country == null)
             {
@@ -95,7 +95,7 @@ namespace World.Controllers
             {
                 return BadRequest();
             }
-            var country = await _countryRepository.GetByCountryId(countryId);
+            var country = await _countryRepository.Get(countryId);
             if(country == null)
             {
                 return NotFound();
